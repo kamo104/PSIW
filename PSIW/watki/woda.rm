@@ -1,0 +1,10 @@
+Każdy producent zgłasza wyprodukowany zasób w sekcji krytycznej, a potem sprawdza czy jego wkład pozwoli stworzyć wodę,
+Jeśli można stworzyć wodę, to zasoby potrzebne do tego są konsumowane, a wszyscy producenci którzy czekali na zużycie ich zasobów - obudzeni.
+Jeśli na tą chwilę nie można stworzyć wody, to wątek zasypia i czeka aż jego zasób zostanie skonsumowany przez kogoś innego.
+
+program pyta na początku o liczbę producentów tlenu i wodoru
+
+program działa dla dowolnej kompozycji "wody" np: H10O3 poprzez zmianę WYMAGANE_TLENY_W_WODZIE lub WYMAGANE_WODORY_W_WODZIE
+program działa dla buforów większych niż 1 poprzez zmianę ROZMIAR_BUFORA
+
+uruchomienie programu bez żadnych parametrów: ./prog.out

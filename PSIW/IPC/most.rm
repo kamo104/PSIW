@@ -1,0 +1,65 @@
+Każde auto przyjeżdżające do mostu może na niech wjechać albo poczekać aż ostatnie auto jadące z naprzeciwka je obudzi.
+Auto przyjeżdżające wjeżdża na most w sytuacji kiedy:
+-(1) ruch odbywa się w kierunku, w który chce jechać oraz nie ma aut czekających naprzeciwko
+-(2) nie ma nikogo na moście*
+
+*(2) nie prowadzi do "bezprawnego" jechania, ponieważ ostatnie auto zjeżdżające z mostu zawsze wpuści odpowiednich czekających na most
+
+Auto przyjeżdżające czeka przed mostem jeśli:
+-(1) ktoś jest na moście i porusza się w stronę przeciwną 
+-(2) ktoś jest na moście i porusza się w tą samą stronę, ale ktoś czeka na przejazd z przeciwnego kierunku
+
+Most przechowuje aktualny kierunek ruchu, czekających po obu stronach i auta aktualnie na nim się znajdujące. (tylko liczby)
+Każda operacja odczytu i modyfikacji mostu jest chroniona semaforem.
+Procesy wchodzą w stan oczekiwania przy pomocy kolejki komunikatów, kiedy pojawi się komunikat, żeby obudzić dany proces, 
+może on od razu wykonywać "przejeżdżanie przez most", ponieważ wszystkie zmienne odpowiedzialne za stan przetwarzania,
+są ustawiane przez ostatnie auto zjeżdżające z mostu, albo auto które wjeżdża na most za jakimś autem, bądź auto wjeżdżające samotnie.
+
+
+program akceptuje jeden parametr w postaci kierunku jazdy (0:S->N, 1:N->S) przykład: ./prog.out 0
+każde uruchomienie programu to "stworzenie" nowego auta które przyjeżdża do mostu
+przejazd przez most zajmuje 2s (zdefiniowane jako PODROZ)
+
+uruchomienie programu bez żadnych parametrów z początkowymi autami S->N 2, N->S 2:
+./most_test.sh
+równoważne komendzie: ./prog.out 0 & ./prog.out 1 & ./prog.out 0 & ./prog.out 1
+
+
+
+opis wykonania: [x] - identyfikator procesu
+[1] Wyruszam w kierunku S->N (1)
+
+[2] Czekam na pozwolenie do jazdy w kierunku N->S (2)
+[3] Czekam na pozwolenie do jazdy w kierunku S->N (2)
+[4] Czekam na pozwolenie do jazdy w kierunku N->S (2)
+
+[1] Koniec podrozy S->N (3)
+
+[1] Wysłano pozwolenie do jazdy w kierunku N->S (4)
+[1] Wysłano pozwolenie do jazdy w kierunku N->S (4)
+
+[2] Odebrano pozwolenie do jazdy w kierunku N->S (5)
+[2] Wyruszam w kierunku N->S (5)
+[4] Odebrano pozwolenie do jazdy w kierunku N->S (5)
+[4] Wyruszam w kierunku N->S (5)
+
+[2] Koniec podrozy N->S (6)
+
+[4] Koniec podrozy N->S (7)
+
+[4] Wysłano pozwolenie do jazdy w kierunku S->N (8)
+
+[3] Odebrano pozwolenie do jazdy w kierunku S->N (9)
+[3] Wyruszam w kierunku S->N (9)
+[3] Koniec podrozy S->N (9)
+
+
+Pierwsze auto[1] które przyjedzie będzie mogło od razu wjechać na most i to zrobi, (1)
+kolejne auta[2][3][4] będą czekały po obu stronach. (2)
+Kiedy pierwsze auto[1] zakończy swoją podróż, (3) 
+wyśle wszystkim czekającym w przeciwnym kierunku[2][4] pozwolenie na wjazd (4)
+Obudzone auta[2][4] wyruszą w podróż. (5)
+Auto które nie jest ostatnie na moście nic nie robi opuszczając go. (6)
+Kiedy ostatnie auto na moście zakończy podróż, (7)
+Wyśle pozwolenie na wjazd autom z naprzeciwka[3]. (8)
+Ostatnie auto zakończy swoją podróż. 
